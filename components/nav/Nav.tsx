@@ -9,6 +9,7 @@ import {
 import MobileNavItem from "@/components/nav/MobileNavItem";
 import { NavigationMenuData } from "@/data";
 import { useParams, usePathname } from "next/navigation";
+import NavItem from "@/components/nav/NavItem";
 import { cn } from "@/lib/utils";
 
 const Nav = () => {
@@ -18,6 +19,21 @@ const Nav = () => {
   const setNavFixed = () => {
     if (window.scrollY >= 170) {
       setFixed(true);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     } else {
       setFixed(false);
     }
@@ -79,17 +95,14 @@ const Nav = () => {
               className={`${toggle ? "flex" : "hidden"
                 } p-4 bg-indigo-500 absolute top-20 right-0 mx-4 my-2 min-w-[70px] rounded-xl sidebar`}
             >
-              <ul className="list-none flex flex-col gap-2 justify-end items-center flex-1 text-cyan-50">
-                {NavigationMenuData.map((menu, idx) => {
-                  return (
-                    <NavItem key={menu.name} link={menu.link}>
-
-                      <MobileNavItem key={idx} link={menu.link}>
-
-                        {menu.name}
-                    </NavItem>
-                  );
-                })}
+              <ul className="list-none flex flex-col gap-2 justify-end items-center flex-1 text-cyan-50">
+                {NavigationMenuData.map((menu, idx) => {
+                  return (
+                    <MobileNavItem key={idx} link={menu.link}> // Use MobileNavItem only
+                      {menu.name}
+                    </MobileNavItem>
+                  );
+                })}
                 <li>
                   <Link
                     href="https://github.com/CodeNight-Ethiopia/codenight-frontend"
