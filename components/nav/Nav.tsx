@@ -14,37 +14,52 @@ import { cn } from "@/lib/utils";
 
 const Nav = () => {
   const [toggle, setToggle] = useState(false);
-  const [fix, setFixed] = useState(false);
+  const [isFixed, setIsFixed] = useState(false);
 
   const setNavFixed = () => {
-    if (window.scrollY >= 170) {
-      setFixed(true);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // Set a lower threshold, like 10px, so it becomes glassy almost immediately on scroll
+    if (window.scrollY >= 10) {
+      setIsFixed(true);
     } else {
-      setFixed(false);
+      setIsFixed(false);
     }
   };
+
   useEffect(() => {
+    // Event listener when the component mounts
     window.addEventListener("scroll", setNavFixed);
-  }, [fix]);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("scroll", setNavFixed);
+    };
+  }, []);
+
+  const fixedNavClasses =
+    "bg-white/40 backdrop-blur-md shadow-md rounded-b-xl border-gray-200 border-b";
+  const initialNavClasses = "bg-transparent border-transparent";
+
+  // max-width classes for the inner container
+  const initialContainerWidth =
+    "sm:max-w-xl md:max-w-full lg:max-w-screen-xl xl:max-w-7xl lg:px-8"; // Wider max-width
+  const fixedContainerWidth = "max-w-6xl lg:px-8"; // Slightly tighter max-width when scrolling
 
   return (
-    <div className={"sticky·top-0·z-50·bg-white·border-b·border-gray-100"}>
-      <div className={` mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl lg:px-8 `}>
+    // Conditional styling applied to the main container div (Glassy Effect)
+    <div
+      className={cn(
+        "sticky top-0 z-50 transition-all duration-300 ease-in-out",
+        isFixed ? fixedNavClasses : initialNavClasses
+      )}
+    >
+      <div
+        // Conditional styling applied to the inner container for width
+        className={cn(
+          "mx-auto transition-all duration-300", // Add transition for smooth width change
+          isFixed ? fixedContainerWidth : initialContainerWidth,
+          isFixed && "overflow-hidden"
+        )}
+      >
         <div className="flex p-6 md:items-center items-start flex-row md:justify-between justify-center">
           <Link
             href="/"
@@ -92,17 +107,18 @@ const Nav = () => {
               />
             )}
             <div
-              className={`${toggle ? "flex" : "hidden"
-                } p-4 bg-indigo-500 absolute top-20 right-0 mx-4 my-2 min-w-[70px] rounded-xl sidebar`}
+              className={`${
+                toggle ? "flex" : "hidden"
+              } p-4 bg-indigo-500 absolute top-20 right-0 mx-4 my-2 min-w-[70px] rounded-xl sidebar`}
             >
-              <ul className="list-none flex flex-col gap-2 justify-end items-center flex-1 text-cyan-50">
-                {NavigationMenuData.map((menu, idx) => {
-                  return (
-                    <MobileNavItem key={idx} link={menu.link}> // Use MobileNavItem only
-                      {menu.name}
-                    </MobileNavItem>
-                  );
-                })}
+              <ul className="list-none flex flex-col gap-2 justify-end items-center flex-1 text-cyan-50">
+                {NavigationMenuData.map((menu, idx) => {
+                  return (
+                    <MobileNavItem key={idx} link={menu.link}>
+                      {menu.name}
+                    </MobileNavItem>
+                  );
+                })}
                 <li>
                   <Link
                     href="https://github.com/CodeNight-Ethiopia/codenight-frontend"
